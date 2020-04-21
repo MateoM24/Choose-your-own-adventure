@@ -5,13 +5,17 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+
+	"github.com/MateoM24/Choose-your-own-adventure/model"
 )
 
 func main() {
-	fmt.Println("App is starting...")
 	plotFile := loadPlot()
 	plotMap := convertJSONToMap(plotFile)
-	fmt.Println(plotMap)
+	storyNodes := model.ParseToStories(plotMap)
+	// printing example
+	fmt.Println(storyNodes["intro"].Options[0].Arc)
+	fmt.Println(storyNodes["intro"].Options[0].Text)
 }
 
 func loadPlot() []byte {
@@ -23,8 +27,9 @@ func loadPlot() []byte {
 	return fileBytes
 }
 
-func convertJSONToMap(file []byte) map[string]interface{} {
-	plotMap := new(map[string]interface{})
+func convertJSONToMap(file []byte) map[string]map[string]interface{} {
+	plotMap := new(map[string]map[string]interface{})
+	// plotMap := new(interface{})
 	err := json.Unmarshal(file, plotMap)
 	if err != nil {
 		log.Fatalln("Cannot unmarshal json file to expected type", err)
