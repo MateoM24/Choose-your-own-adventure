@@ -22,14 +22,20 @@ func main() {
 	templates := loadTemplates()
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		requestedFile := r.URL.Path[1:]
-		template := templates.Lookup(requestedFile + ".html")
-		if template != nil {
+		fmt.Println("url:", requestedFile)
+		var template *template.Template
+		if requestedFile == "" {
+			template = templates.Lookup("home.html")
+		} else {
+			template = templates.Lookup(requestedFile + ".html")
+		}
+		if template == nil {
+			w.WriteHeader(http.StatusNotFound)
+		} else {
 			err := template.Execute(w, nil)
 			if err != nil {
-				log.Fatalln("Cannot find template for", requestedFile, ".html")
+				log.Fatalln("Cannot execute template for", requestedFile, ".html")
 			}
-		} else {
-			w.WriteHeader(http.StatusNotFound)
 		}
 	})
 	http.Handle("/img/", http.FileServer(http.Dir("public")))
