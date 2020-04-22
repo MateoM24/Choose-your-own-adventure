@@ -48,14 +48,3 @@ func parseToStory(data map[string]interface{}) StoryNode {
 	}
 	return storyNode
 }
-
-func trim(text string, symbols string) string {
-	var finalText string
-	for _, s := range symbols {
-		// fmt.Println(text)
-		// fmt.Println(s)
-		text = strings.TrimPrefix(text, string(s))
-		text = strings.TrimSuffix(text, string(s))
-	}
-	return finalText
-}

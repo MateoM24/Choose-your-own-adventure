@@ -3,8 +3,10 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"io/ioutil"
 	"log"
+	"net/http"
 
 	"github.com/MateoM24/Choose-your-own-adventure/model"
 )
@@ -13,9 +15,26 @@ func main() {
 	plotFile := loadPlot()
 	plotMap := convertJSONToMap(plotFile)
 	storyNodes := model.ParseToStories(plotMap)
-	// printing example
+	// printing example how to traverse stories
 	fmt.Println(storyNodes["intro"].Options[0].Arc)
 	fmt.Println(storyNodes["intro"].Options[0].Text)
+
+	templates := loadTemplates()
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		requestedFile := r.URL.Path[1:]
+		template := templates.Lookup(requestedFile + ".html")
+		if template != nil {
+			err := template.Execute(w, nil)
+			if err != nil {
+				log.Fatalln("Cannot find template for", requestedFile, ".html")
+			}
+		} else {
+			w.WriteHeader(http.StatusNotFound)
+		}
+	})
+	http.Handle("/img/", http.FileServer(http.Dir("public")))
+	http.Handle("/css/", http.FileServer(http.Dir("public")))
+	http.ListenAndServe(":8000", nil)
 }
 
 func loadPlot() []byte {
@@ -29,7 +48,6 @@ func loadPlot() []byte {
 
 func convertJSONToMap(file []byte) map[string]map[string]interface{} {
 	plotMap := new(map[string]map[string]interface{})
-	// plotMap := new(interface{})
 	err := json.Unmarshal(file, plotMap)
 	if err != nil {
 		log.Fatalln("Cannot unmarshal json file to expected type", err)
@@ -37,21 +55,9 @@ func convertJSONToMap(file []byte) map[string]map[string]interface{} {
 	return *plotMap
 }
 
-// check how to use it instead of too generic interface{}
-type plot struct {
-	title   string
-	story   []string
-	options []option
+func loadTemplates() *template.Template {
+	templates := template.New("templates")
+	const basePath = "templates"
+	template.Must(templates.ParseGlob(basePath + "/*.html"))
+	return templates
 }
-
-type option struct {
-	text string
-	arc  string
-}
-
-// func loadTemplates() *template.Template {
-// 	templates := template.New("templates")
-// 	const basePath = "templates"
-// 	template.Must(templates.ParseGlob(basePath + "/*.html"))
-// 	return templates
-// }
