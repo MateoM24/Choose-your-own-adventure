@@ -1,0 +1,14 @@
+body {
+    background-color: azure;
+    color: blue;
+
+}
+
+.center {
+    color: chocolate;
+    margin: auto;
+    width: 50%;
+    border: 3px solid green;
+    padding: 10px;
+    text-align: center;
+}

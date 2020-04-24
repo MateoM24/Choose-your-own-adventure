@@ -1,4 +1,4 @@
-{{define "home.html"}}
+{{define "plot.html"}}
 <!doctype html>
 
 <html lang="en">
@@ -14,9 +14,12 @@
 <body>
     <div class="center">
         <h1>Chose your adventure<h1>
+            <h2>{{.GetStoryNode.Title}}</h2>
+            <h3>{{.GetStoryNode.Story}}</h3>
         <div>
             <form action="plot">
-                <input type="submit" value="Start">
+                <input type="submit" value="Option A">
+                <input type="submit" value="Option B">
             </form>
         </div>
     </div>

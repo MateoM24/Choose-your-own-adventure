@@ -11,18 +11,23 @@ import (
 	"github.com/MateoM24/Choose-your-own-adventure/model"
 )
 
+type Ops struct {
+	Title string
+}
+
 func main() {
 	plotFile := loadPlot()
 	plotMap := convertJSONToMap(plotFile)
-	storyNodes := model.ParseToStories(plotMap)
+	adventure := model.ParseToStories(plotMap)
+	adventure.Start()
 	// printing example how to traverse stories
-	fmt.Println(storyNodes["intro"].Options[0].Arc)
-	fmt.Println(storyNodes["intro"].Options[0].Text)
+	// fmt.Println(adventure.GetStoryNode().Title)
+	// fmt.Println(adventure.GetStoryNode().Story)
+	fmt.Println(adventure.GetStoryNode().Title)
 
 	templates := loadTemplates()
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		requestedFile := r.URL.Path[1:]
-		fmt.Println("url:", requestedFile)
 		var template *template.Template
 		if requestedFile == "" {
 			template = templates.Lookup("home.html")
@@ -32,7 +37,7 @@ func main() {
 		if template == nil {
 			w.WriteHeader(http.StatusNotFound)
 		} else {
-			err := template.Execute(w, nil)
+			err := template.Execute(w, adventure)
 			if err != nil {
 				log.Fatalln("Cannot execute template for", requestedFile, ".html")
 			}
