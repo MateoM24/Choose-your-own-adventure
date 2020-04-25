@@ -4,6 +4,10 @@ body {
 
 }
 
+.head {
+    color: green;
+}
+
 .center {
     color: chocolate;
     margin: auto;
@@ -11,4 +15,16 @@ body {
     border: 3px solid green;
     padding: 10px;
     text-align: center;
+}
+
+.options {
+    display: inline-flexbox;
+    padding: 10px;
+}
+
+.option {
+    color: darkblue;
+    padding: 10px;
+    margin: 10px;
+    background-color: lightblue;
 }

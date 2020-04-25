@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -12,6 +13,9 @@ import (
 func main() {
 	plotMap := infra.LoadPlotFileToMap()
 	adventure := model.ParseToStories(plotMap, "intro")
+
+	fmt.Println(adventure.GetCurrentStoryNode().Options)
+
 	templates := loadTemplates()
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		requestedFile := r.URL.Path[1:]

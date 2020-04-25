@@ -13,14 +13,22 @@
 
 <body>
     <div class="center">
-        <h1>Chose your adventure<h1>
+    <div class="head">
+        <h1>Chose your adventure</h1>
             <h2>{{.GetCurrentStoryNode.Title}}</h2>
-            <h3>{{.GetCurrentStoryNode.Story}}</h3>
+        </div>        
+            <br>
+            <h3>{{.GetCurrentStoryNode.Story}}
+                <div class="options">
+                    {{range .GetCurrentStoryNode.Options}}
+                    <form action="plot">
+                        <input class="option" type="submit" value={{.Text}}>
+                    </form>
+                    {{end}}
+                </div>
+            </h3>
         <div>
-            <form action="plot">
-                <input type="submit" value="Option A">
-                <input type="submit" value="Option B">
-            </form>
+            
         </div>
     </div>
 </body>
