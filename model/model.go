@@ -36,5 +36,3 @@ func newAdventure() *Adventure {
 	adventure := Adventure{nodes: make(map[string]StoryNode)}
 	return &adventure
 }
-
-// TODO wyznacz pierwszy story na starcie
