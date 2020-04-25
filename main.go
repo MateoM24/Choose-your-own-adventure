@@ -11,7 +11,8 @@ import (
 
 func main() {
 	plotMap := infra.LoadPlotFileToMap()
-	adventure := model.ParseToStories(plotMap, "intro")
+	const startingNodeName string = "intro"
+	adventure := model.ParseToStories(plotMap, startingNodeName)
 	templates := loadTemplates()
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		requestedFile := r.URL.Path[1:]
@@ -24,6 +25,13 @@ func main() {
 		if template == nil {
 			w.WriteHeader(http.StatusNotFound)
 		} else {
+			if r.Method == "POST" {
+				r.ParseForm()
+				nextNodeName := r.PostForm["next"][0]
+				adventure.Next(nextNodeName)
+			} else {
+				adventure.Next(startingNodeName)
+			}
 			err := template.Execute(w, adventure)
 			if err != nil {
 				log.Fatalln("Cannot execute template for", requestedFile, ".html")

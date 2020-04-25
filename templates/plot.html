@@ -14,22 +14,24 @@
 <body>
     <div class="center">
     <div class="head">
-        <h1>Chose your adventure</h1>
-            <h2>{{.GetCurrentStoryNode.Title}}</h2>
-        </div>        
-            <br>
-            <h3>{{.GetCurrentStoryNode.Story}}
-                <div class="options">
-                    {{range .GetCurrentStoryNode.Options}}
-                    <form action="plot">
-                        <input class="option" type="submit" value={{.Text}}>
-                    </form>
-                    {{end}}
-                </div>
-            </h3>
-        <div>
-            
-        </div>
+    <h1><b>Chose your adventure</b></h1>
+    <h2>{{.GetCurrentStoryNode.Title}}</h2>
+    </div>        
+        <br>
+        <h3>{{.GetCurrentStoryNode.Story}}
+            <div class="options">
+                {{range .GetCurrentStoryNode.Options}}
+                <form action="plot" method="post">
+                    <button name="next" value={{.Arc}}>{{.Text}}</button>
+                </form>
+                {{end}}
+                {{if not .GetCurrentStoryNode.Options}}
+                <form action="home" method="get">
+                    <button>The adventure is over but you can start it again from the beginning.</button>
+                </form>
+                {{end}}
+            </div>
+        </h3>
     </div>
 </body>
 </html>
