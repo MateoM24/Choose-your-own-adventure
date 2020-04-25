@@ -18,12 +18,11 @@ type Ops struct {
 func main() {
 	plotFile := loadPlot()
 	plotMap := convertJSONToMap(plotFile)
-	adventure := model.ParseToStories(plotMap)
-	adventure.Start()
+	adventure := model.ParseToStories(plotMap, "intro")
 	// printing example how to traverse stories
 	// fmt.Println(adventure.GetStoryNode().Title)
 	// fmt.Println(adventure.GetStoryNode().Story)
-	fmt.Println(adventure.GetStoryNode().Title)
+	fmt.Println(adventure.GetCurrentStoryNode().Title)
 
 	templates := loadTemplates()
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {

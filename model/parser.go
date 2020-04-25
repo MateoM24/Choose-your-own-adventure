@@ -5,12 +5,13 @@ import (
 	"strings"
 )
 
-func ParseToStories(data map[string]map[string]interface{}) *Adventure {
+func ParseToStories(data map[string]map[string]interface{}, startNodeName string) *Adventure {
 	adv := newAdventure()
 	for k, v := range data {
 		story := parseToStory(v)
 		adv.putStoryNode(k, story)
 	}
+	adv.start(startNodeName)
 	return adv
 }
 

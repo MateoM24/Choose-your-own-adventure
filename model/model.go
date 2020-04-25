@@ -20,11 +20,11 @@ func (adv *Adventure) Next(storyNodeTitle string) {
 	adv.currentStoryNode = adv.nodes[storyNodeTitle]
 }
 
-func (adv *Adventure) Start() {
-	adv.Next("intro")
+func (adv *Adventure) start(startNodeName string) {
+	adv.Next(startNodeName)
 }
 
-func (adv *Adventure) GetStoryNode() StoryNode {
+func (adv *Adventure) GetCurrentStoryNode() StoryNode {
 	return adv.currentStoryNode
 }
 
